@@ -24,6 +24,8 @@ You can use Paraview_MCP with Claude Code from the command line but if you want 
 Install VS Code.
 Get the Claude Code for VS Code extension.
 
+You probably have to make sure VS Code is not running in restricted mode in order to use Claude Code with it.
+
 ### Install Paraview
 
 Install version 5.13.3-Windows-Python3.10-msvc2017-AMD64 from https://www.paraview.org/download/
