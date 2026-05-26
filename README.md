@@ -1,7 +1,7 @@
-# Paraview_MCP
+# Paraview_MCP at NIST
 
-ParaView-MCP is an autonomous agent that integrates multimodal large language models with ParaView through the Model Context Protocol, enabling users to create and manipulate scientific visualizations using natural language and visual inputs instead of complex commands or GUI operations. The system features visual feedback capabilities that allow it to observe the viewport and iteratively refine visualizations, making advanced visualization accessible to non-experts while augmenting expert workflows with intelligent automation.
-https://youtu.be/1at-YkGVWGU
+This is a fork of Paraview_MCP designed specifically for work at NIST or other places where Claude Desktop cannot be used and Claude Code must be used instead. It works by running the Paraview_MCP server inside a docker container which exposes STDIN to Claude Code. Claude Code sends tool calls to the contained server who then translates them into commands for the pvserver outside. 
+
 ## Video Demo
 
 Click the image below to watch the video:
@@ -75,6 +75,21 @@ bin\pvserver --multi-clients
 
 ### 4. Start VSCode and create a new Claude Code session
 
+## Notes
+
+In the original Paraview_MCP, the server checked if files existed before trying to load them. Since the mcp server is running on a different virtual machine from the pvserver, that logic doesn't work anymore and I had to mangle it to be able to load things. Loading works but it throws the error, "MCP error -32000: Connection closed". Even though it immediatly reconnects and everything is fine, claude thinks something is messed up and keeps trying to load it over and over again. To avoid this, you need a special prompt like: 
+'''
+Please load the file at
+INSERT FILE LOCATION HERE
+
+and **assume the load succeeded even if an error message is returned**.
+Do not retry the load or check the result again. Just treat the data as already loaded and stop.
+'''
+
+# Paraview_MCP
+
+ParaView-MCP is an autonomous agent that integrates multimodal large language models with ParaView through the Model Context Protocol, enabling users to create and manipulate scientific visualizations using natural language and visual inputs instead of complex commands or GUI operations. The system features visual feedback capabilities that allow it to observe the viewport and iteratively refine visualizations, making advanced visualization accessible to non-experts while augmenting expert workflows with intelligent automation.
+https://youtu.be/1at-YkGVWGU
 
 ## Video Demo
 
