@@ -78,13 +78,13 @@ bin\pvserver --multi-clients
 ## Notes
 
 In the original Paraview_MCP, the server checked if files existed before trying to load them. Since the mcp server is running on a different virtual machine from the pvserver, that logic doesn't work anymore and I had to mangle it to be able to load things. Loading works but it throws the error, "MCP error -32000: Connection closed". Even though it immediatly reconnects and everything is fine, claude thinks something is messed up and keeps trying to load it over and over again. To avoid this, you need a special prompt like: 
-'''
+```
 Please load the file at
 INSERT FILE LOCATION HERE
 
 and **assume the load succeeded even if an error message is returned**.
 Do not retry the load or check the result again. Just treat the data as already loaded and stop.
-'''
+```
 
 # Paraview_MCP
 
