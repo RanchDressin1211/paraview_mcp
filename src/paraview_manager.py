@@ -141,10 +141,11 @@ class ParaViewManager:
             if not os.path.exists(file_path):
                 self.logger.error(f"File not found: {file_path} (original: {original_path})")
                 return False, f"File not found: {file_path} (tried from multiple locations)", None, ""
-                """
+                
             
             # Record the directory of the loaded file so we can re-use it.
             self._data_folder = os.path.dirname(file_path)
+            """
 
             # Get file extension
             _, file_extension = os.path.splitext(file_path)
@@ -182,6 +183,7 @@ class ParaViewManager:
             # else:
                 # display.ScaleFactor = 0.5
 
+            """ Cameras are the devil
             view.ResetCamera()  # Allow full camera reset including clipping range
 
             # Add some padding by zooming out slightly for better framing
@@ -190,7 +192,8 @@ class ParaViewManager:
                 cam.Dolly(0.7)  # Zoom out by 30% for better initial view
                 from paraview.simple import Render
                 Render()  # Update the view after camera adjustment
-
+            """
+            
             # Save the loaded reader as the original data source
             self.original_source = reader
             
@@ -198,6 +201,7 @@ class ParaViewManager:
             source_name = self._get_source_name(reader)
             
             return True, f"Successfully loaded data from {file_path}", reader, source_name
+            
         except Exception as e:
             self.logger.error(f"Error loading data: {str(e)} file path{file_path}")
             return False, f"Error loading data: {str(e)} file path{file_path}", None, ""
