@@ -632,6 +632,7 @@ def configure_screenshot_compression(
             f"max_width={pv_manager.max_screenshot_width}px, "
             f"quality={pv_manager.screenshot_quality}")
 
+'''
 @mcp.tool()
 def get_screenshot() -> str:
     """
@@ -683,7 +684,7 @@ def reset_camera(padding_factor: float = 1.5) -> str:
     """
     success, message = pv_manager.reset_camera(padding_factor)
     return message
-
+'''
 @mcp.tool()
 def reset_colormaps(array_name: str = None) -> str:
     """
@@ -1011,9 +1012,9 @@ def list_commands() -> str:
         "create_streamline: Create stream line visualization with tubes",
         "compute_surface_area: Compute the surface area of the active surface",
         "save_contour_as_stl: Save the active surface as STL",
-        "get_screenshot: Capture a screenshot and display it in chat",
-        "rotate_camera: Rotate the camera view",
-        "reset_camera: Reset the camera to show all data",
+        #"get_screenshot: Capture a screenshot and display it in chat",
+        #"rotate_camera: Rotate the camera view",
+        #"reset_camera: Reset the camera to show all data",
         "plot_over_line: Create a plot over line filter",
         "warp_by_vector: Warp the active source by a vector field",
         "save_paraview_state: Save the current ParaView state to a file",
