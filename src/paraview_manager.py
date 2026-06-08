@@ -471,14 +471,14 @@ class ParaViewManager:
                         otf.Points = [0.0, 0.0, 0.5, 0.0, 255.0, 1.0, 0.5, 0.0]  # Default linear
                 except:
                     pass  # Ignore if the array doesn't exist
-
+            '''
             # --------------------------------------------------------
             # 4.  Reset the active view & camera
             # --------------------------------------------------------
             view = GetActiveView()
             if view:
                 # One call handles both camera framing *and* clipping range
-                ResetCamera(view)
+                #ResetCamera(view)
 
                 # Set a neutral dark-grey background (solid, no gradient)
                 if hasattr(view, "Background"):
@@ -489,6 +489,7 @@ class ParaViewManager:
                 # Let ResetCamera handle the camera position based on data bounds
                 # Only set view up and ensure proper projection
                 # Check if view supports camera (3D render view) vs 2D plot views
+                
                 cam = None
                 if hasattr(view, "GetActiveCamera"):
                     cam = view.GetActiveCamera()
@@ -501,11 +502,11 @@ class ParaViewManager:
                     # Center of rotation should match camera focal point for intuitive rotation
                     if hasattr(view, "CenterOfRotation") and cam:
                         view.CenterOfRotation = cam.GetFocalPoint()
-
+                
                 # Ensure perspective projection
                 if hasattr(view, "CameraParallelProjection"):
                     view.CameraParallelProjection = 0
-
+                
                 # Reset any view-specific settings
                 # For ParaView 5.10+, use BackgroundColorMode instead of UseGradientBackground
                 if hasattr(view, "BackgroundColorMode"):
@@ -516,7 +517,7 @@ class ParaViewManager:
 
                 if hasattr(view, "OrientationAxesVisibility"):
                     view.OrientationAxesVisibility = 1  # Show orientation axes
-
+            '''
             # --------------------------------------------------------
             # 5.  Force a redraw so the GUI updates immediately
             # --------------------------------------------------------
