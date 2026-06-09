@@ -205,6 +205,100 @@ class ParaViewManager:
         except Exception as e:
             self.logger.error(f"Error loading data: {str(e)} file path{file_path}")
             return False, f"Error loading data: {str(e)} file path{file_path}", None, ""
+            
+    def load_state(self, file_path):
+        LoadState(file_path)
+        RenderAllViews()
+        return True, f"Successfully loaded state from {file_path}"
+        '''
+        """
+        Load data from a state file into ParaView
+        
+        Args:
+            file_path: Path to the state file (can be relative or absolute)
+            
+        Returns:
+            tuple: (success, message, reader, source_name)
+        """
+        try:
+            import os
+            from paraview.simple import LoadState, Show, GetActiveView
+
+            # Handle relative paths by checking multiple possible base directories
+            original_path = file_path
+            
+            """
+            # Convert to absolute path if it's relative
+            if not os.path.isabs(file_path):
+                # Try different base directories for relative paths
+                possible_bases = [
+                    os.getcwd(),  # Current working directory
+                    os.path.dirname(os.path.dirname(__file__)),  # Project root (parent of src/)
+                    os.path.join(os.path.dirname(os.path.dirname(__file__)), 'eval')  # eval directory
+                ]
+                
+                for base_dir in possible_bases:
+                    test_path = os.path.join(base_dir, file_path)
+                    if os.path.exists(test_path):
+                        file_path = test_path
+                        break
+                else:
+                    # If still not found, use absolute path of original
+                    file_path = os.path.abspath(original_path)
+            
+            # Final check if file exists
+            if not os.path.exists(file_path):
+                self.logger.error(f"File not found: {file_path} (original: {original_path})")
+                return False, f"File not found: {file_path} (tried from multiple locations)", None, ""
+                
+            
+            # Record the directory of the loaded file so we can re-use it.
+            self._data_folder = os.path.dirname(file_path)
+            """
+
+            # Get file extension
+            _, file_extension = os.path.splitext(file_path)
+            file_extension = file_extension.lower()
+            file_name = os.path.basename(file_path)
+
+            # Special handling for .py files
+            if file_extension == '.py':
+                return False, "Loading .py files not implemented. Try converting it to a .pvsm"
+            else:
+                # Standard loading for other file types
+                LoadState(file_path)
+
+            # Show in the active view
+            view = GetActiveView()
+            if not view:
+                # Create a render view if none exists
+                from paraview.simple import CreateRenderView
+                view = CreateRenderView()
+                self.logger.info("Created new render view")
+
+            try:
+                if view:
+                    Render(view)
+            except Exception as err:
+                self.logger.warning(f"Render failed after loading state: {err}")
+
+            """ Cameras are the devil
+            view.ResetCamera()  # Allow full camera reset including clipping range
+
+            # Add some padding by zooming out slightly for better framing
+            cam = view.GetActiveCamera()
+            if cam:
+                cam.Dolly(0.7)  # Zoom out by 30% for better initial view
+                from paraview.simple import Render
+                Render()  # Update the view after camera adjustment
+            """
+            
+            return True, f"Successfully loaded state from {file_path}"
+            
+        except Exception as e:
+            self.logger.error(f"Error loading state: {str(e)} file path{file_path}")
+            return False, f"Error loading state: {str(e)} file path{file_path}", None, ""
+    '''
 
     
     def _configure_raw_reader(self, file_path, file_name, dimensions=None, data_type=None,
@@ -380,7 +474,7 @@ class ParaViewManager:
                     # Use Outline representation to avoid slice mapper issues
                     display.SetRepresentationType('Outline')
                     self.logger.info("Set representation to Outline for 3D data")
-
+            '''cameras are the devil
             view.ResetCamera()  # Allow full camera reset including clipping range
 
             # Add some padding by zooming out slightly for better framing
@@ -389,7 +483,7 @@ class ParaViewManager:
                 cam.Dolly(0.7)  # Zoom out by 30% for better initial view
                 from paraview.simple import Render
                 Render()  # Update the view after camera adjustment
-
+            '''
             # Save as original source
             self.original_source = reader
 
@@ -776,7 +870,7 @@ class ParaViewManager:
             )
 
             # Use the originally loaded source if available; fall back to the active source.
-            base_source = self.original_source or GetActiveSource()
+            base_source = GetActiveSource() or self.original_source
             if not base_source:
                 return False, "Error: No active source. Load data first.", None, ""
 
@@ -887,7 +981,7 @@ class ParaViewManager:
                 GetActiveView, SetActiveSource, Clip, Show, GetActiveSource
             )
             
-            base_source = self.original_source or GetActiveSource()
+            base_source = GetActiveSource() or self.original_source
             if not base_source:
                 return False, "Error: No active source. Load data first.", None, None
             
@@ -955,7 +1049,7 @@ class ParaViewManager:
                 GetActiveView, SetActiveSource, Slice, Show, GetActiveSource
             )
 
-            base_source = self.original_source or GetActiveSource()
+            base_source = GetActiveSource() or self.original_source
             if not base_source:
                 return False, "Error: No active source. Load data first.", None, None
 
@@ -1510,7 +1604,7 @@ class ParaViewManager:
                                         If None, the function automatically selects
                                         the first array with more than one component.
             base_source (optional): The data source (volume) on which to perform stream tracing.
-                                If None, uses self.original_source or GetActiveSource().
+                                If None, uses GetActiveSource() or self.original_source.
             point_center (list, optional): Center coordinates [x, y, z] for the seed points.
                                         If None, the center of the volume's bounds is used.
             integration_direction (str): "FORWARD", "BACKWARD", or "BOTH" for integration.
@@ -1531,7 +1625,7 @@ class ParaViewManager:
 
             # Determine the base source: use provided, or self.original_source, or the active source.
             if base_source is None:
-                base_source = self.original_source or GetActiveSource()
+                base_source = GetActiveSource() or self.original_source
             if not base_source:
                 return False, "Error: No active source. Load data first.", None, ""
 
