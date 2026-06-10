@@ -90,6 +90,20 @@ def load_data(file_path: str) -> str:
         return f"{message}. Source registered as '{source_name}'."
     else:
         return message
+        
+@mcp.tool()
+def load_state(file_path: str) -> str:
+    """
+    Load a state from a file into ParaView.
+    
+    Args:
+        file_path: Path to the data file (supports .pvsm)
+    
+    Returns:
+        Status message
+    """
+    success, message = pv_manager.load_state(file_path)
+    return message
 
 @mcp.tool()
 def load_raw_data(file_path: str,
@@ -566,7 +580,7 @@ def get_available_arrays() -> str:
 @mcp.tool()
 def create_streamline(seed_point_number: int, vector_field: str = None,
                      integration_direction: str = "BOTH", max_steps: int = 1000,
-                     initial_step: float = 0.1, maximum_step: float = 50.0) -> str:
+                     initial_step: float = 0.1, maximum_step: float = 50.0, tube_radius: float = .1) -> str:
     """
     Create streamlines from the loaded vector volume using the StreamTracer filter.
     This function automatically generates seed points based on the data bounds.
@@ -579,6 +593,7 @@ def create_streamline(seed_point_number: int, vector_field: str = None,
         max_steps (int): Maximum number of integration steps (default: 1000).
         initial_step (float): Initial integration step length (default: 0.1).
         maximum_step (float): Maximum streamline length (default: 50.0).
+        radius (float): Radius of the tubes that cover the streamlines
         
     Returns:
         str: Status message indicating whether the streamline was successfully created.
@@ -591,7 +606,8 @@ def create_streamline(seed_point_number: int, vector_field: str = None,
         integration_direction=integration_direction,
         initial_step_length=initial_step,
         maximum_stream_length=maximum_step,
-        number_of_streamlines=seed_point_number
+        number_of_streamlines=seed_point_number,
+        tube_radius=tube_radius
     )
     
     if success:
