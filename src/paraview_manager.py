@@ -498,7 +498,46 @@ class ParaViewManager:
         except Exception as e:
             self.logger.error(f"Error loading RAW data: {str(e)}")
             return False, f"Error loading RAW data: {str(e)}", None, ""
-
+    
+    def delete_source(self, name):
+        """
+            Delete a source from the pipeline by its registered name.
+        
+        Args:
+            name (str): The registered name of the source to delete
+            
+        Returns:
+            tuple: (success: bool, message: str)
+        """
+        try:
+            from paraview.simple import GetSources, Delete
+            
+            sources_dict = GetSources()
+            if not sources_dict:
+                return False, "No sources available in the pipeline."
+            
+            # Find the source with the matching name
+            proxy_to_delete = None
+            source_key = None
+            for (key, proxy) in sources_dict.items():
+                # key is typically (registeredName, fileNameOrOtherString)
+                if key[0] == name:
+                    proxy_to_delete = proxy
+                    source_key = key
+                    break
+            
+            if proxy_to_delete is None:
+                return False, f"No source found with the name '{name}'."
+            
+            # Delete the source
+            Delete(proxy_to_delete)
+            
+            return True, f"Successfully deleted source '{name}'."
+            
+        except Exception as e:
+            self.logger.error(f"Error deleting source: {str(e)}")
+            return False, f"Error deleting source: {str(e)}"
+    
     def clear_pipeline_and_reset(self):
         """
         Completely clear the ParaView pipeline and return the GUI to a clean,
