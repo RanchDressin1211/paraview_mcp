@@ -752,6 +752,20 @@ def warp_by_vector(vector_field: str = None, scale_factor: float = 1.0) -> str:
     return message
 
 @mcp.tool()
+def delete_source(name: str) -> str:
+    """
+    Delete a source from the pipeline by its registered name.
+    
+    Args:
+        name: The registered name of the source to delete
+    
+    Returns:
+        Status message
+    """
+    success, message = pv_manager.delete_source(name)
+    return message
+
+@mcp.tool()
 def clear_pipeline_and_reset() -> str:
     """
     Clear the entire ParaView rendering pipeline and reset to a fresh state,
@@ -1011,6 +1025,7 @@ def list_commands() -> str:
         "create_vector_visualization: Visualize vector fields with glyphs (arrows/cones)",
         "analyze_field_data: Compute gradients, connectivity analysis",
         "export_data: Export data in multiple formats (CSV, VTK, STL, etc.)",
+        "delete_source: Delete a source from the pipeline by its registered name",
         "clear_pipeline_and_reset: Clear all pipeline objects and reset to fresh state",
         "set_background_color: Set the background color of the view",
         "toggle_volume_rendering: Enable or disable volume rendering",
