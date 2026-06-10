@@ -985,6 +985,8 @@ class ParaViewManager:
             if not base_source:
                 return False, "Error: No active source. Load data first.", None, None
             
+            self.toggle_visibility(False)
+            
             # If origin is unspecified, use the center of the dataset
             if origin_x is not None and origin_y is not None and origin_z is not None:
                 origin = [origin_x, origin_y, origin_z]
@@ -1052,7 +1054,9 @@ class ParaViewManager:
             base_source = GetActiveSource() or self.original_source
             if not base_source:
                 return False, "Error: No active source. Load data first.", None, None
-
+            
+            self.toggle_visibility(False)
+            
             # If origin is unspecified, use the center of the dataset
             if origin_x is not None and origin_y is not None and origin_z is not None:
                 origin = [origin_x, origin_y, origin_z]
@@ -2134,9 +2138,12 @@ class ParaViewManager:
         """
         try:
             from paraview.simple import GetActiveSource, WarpByVector, Show, GetActiveView
+            
             source = GetActiveSource()
             if not source:
                 return False, "Error: No active source. Load data first.", None
+            
+            self.toggle_visibility(False)
 
             # If vector_field is not specified, try to auto-detect a vector field
             if vector_field is None:
@@ -2384,6 +2391,8 @@ class ParaViewManager:
             source = GetActiveSource()
             if not source:
                 return False, "Error: No active source. Load data first.", None, ""
+                
+            self.toggle_visibility(False)
             
             # Create transform filter
             transform_filter = Transform(Input=source)
