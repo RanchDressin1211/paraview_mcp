@@ -1722,7 +1722,7 @@ class ParaViewManager:
     # Wrapper added by Claude Code to expose stream tracer via create_streamline command
     def create_streamline(self, seed_point_number: int, vector_field: str = None,
                          integration_direction: str = "BOTH", max_steps: int = 1000,
-                         initial_step: float = 0.1, maximum_step: float = 50.0):
+                         initial_step: float = 0.1, maximum_step: float = 50.0, tube_radius: float = .1):
         """
         Wrapper that forwards to create_stream_tracer.
         Note: max_steps is ignored because the underlying implementation uses number_of_streamlines.
@@ -1734,7 +1734,8 @@ class ParaViewManager:
             integration_direction=integration_direction,
             initial_step_length=initial_step,
             maximum_stream_length=maximum_step,
-            number_of_streamlines=seed_point_number)
+            number_of_streamlines=seed_point_number,
+            tube_radius=tube_radius)
 
     def get_screenshot(self):
         """
