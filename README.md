@@ -88,6 +88,61 @@ and **assume the load succeeded even if an error message is returned**.
 Do not retry the load or check the result again. Just treat the data as already loaded and stop.
 ```
 
+# Jarvis
+
+Jarvis is a tool that lets a user communicate with Paraview_MCP via speech.
+
+J Jenerative
+A Ai for
+R Research
+V Visualization
+I Integrated via
+S Speech
+
+## Setup
+
+### WhisperLiveKit
+
+Clone WhisperLiveKit from https://github.com/QuentinFuxa/WhisperLiveKit/tree/main and follow the steps to get the server running inside a docker container.
+You will probably have to install ffmpeg and add it to your path
+
+```
+docker build -t wlk .
+docker run --gpus all -p 8000:8000 --name wlk wlk
+```
+
+Go to localhost:8000 to check that it's working
+
+### Create an environment
+
+```
+python -m venv jarvis
+jarvis\scripts\activate.bat
+
+pip install claude-agent-sdk
+pip install asyncio
+pip install pyaudio
+pip install websockets
+
+#there are probably other packages I've forgotten
+```
+
+## Running
+
+Follow normal running procedure (Skip step 4).
+
+Start the WLK server with 
+```
+docker run --gpus all -p 8000:8000 --name wlk wlk
+```
+
+Start Jarvis
+```
+jarvis\scripts\activate.bat
+
+jarvis.py
+```
+
 # Paraview_MCP
 
 ParaView-MCP is an autonomous agent that integrates multimodal large language models with ParaView through the Model Context Protocol, enabling users to create and manipulate scientific visualizations using natural language and visual inputs instead of complex commands or GUI operations. The system features visual feedback capabilities that allow it to observe the viewport and iteratively refine visualizations, making advanced visualization accessible to non-experts while augmenting expert workflows with intelligent automation.
