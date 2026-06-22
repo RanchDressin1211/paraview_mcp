@@ -92,12 +92,12 @@ Do not retry the load or check the result again. Just treat the data as already 
 
 Jarvis is a tool that lets a user communicate with Paraview_MCP via speech.
 
-J Jenerative
-A Ai for
-R Research
-V Visualization
-I Integrated via
-S Speech
+J Jenerative  
+A Ai for  
+R Research  
+V Visualization  
+I Integrated via  
+S Speech  
 
 ## Setup
 
