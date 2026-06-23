@@ -120,6 +120,8 @@ Go to localhost:8000 to check that it's working
 
 ### Create an environment
 
+I have found that this works on Python 3.12.10. It did not work for 3.14.1. I do not know of other versions that do or do not work.
+
 ```
 python -m venv jarvis
 jarvis\scripts\activate.bat
