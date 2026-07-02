@@ -2,7 +2,7 @@
 """
 Jarvis Voice Command Bridge.
 Listens to the microphone via WhisperLiveKit server and sends commands
-starting with 'jarvis' and ending with 'end command' to Claude Code.
+starting with 'jarvis' and ending with 'pronto' to Claude Code.
 """
 import asyncio
 import sys
@@ -72,13 +72,14 @@ async def main():
         allowed_tools=["mcp__paraview_mcp__*"]
     )
 
+    #connects to claude stk client
     async with ClaudeSDKClient(options=options) as client:    
         async with websockets.connect(
             "ws://localhost:8000/asr",
             ping_interval=20,
             ping_timeout=20
         ) as websocket:
-            print("Connected. Listening for 'jarvis ... end command'...")
+            print("Connected. Listening for 'jarvis ... pronto'...")
             
             config_raw = await websocket.recv()
             config_msg = json.loads(config_raw)
@@ -117,9 +118,9 @@ async def main():
                                 print("\n🎙️ Jarvis listening...")
 
                             if state["capturing_command"]:
-                                if "end command" in lower_text:
+                                if "pronto" in lower_text:
                                     last_jarvis_idx = lower_text.rfind("jarvis")
-                                    first_end_idx = lower_text.find("end command", last_jarvis_idx)
+                                    first_end_idx = lower_text.find("pronto", last_jarvis_idx)
                                     
                                     if first_end_idx != -1 and first_end_idx > state["last_processed_end_index"]:
                                         command = full_text[last_jarvis_idx + 6 : first_end_idx].strip()
