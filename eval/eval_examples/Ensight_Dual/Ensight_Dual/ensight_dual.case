@@ -1,0 +1,19 @@
+FORMAT
+type: ensight gold
+
+GEOMETRY
+model: ensight_dual.geo
+
+VARIABLE
+scalar per node: 1 P ensight_dual.********.sca00
+scalar per node: 1 T ensight_dual.********.sca01
+vector per node: 1 U ensight_dual.********.vec00
+
+TIME
+time set: 1
+number of steps:        3
+filename start number:   562700
+filename increment:      100
+time values: 2.360678964510326e-01
+            2.361101138635087e-01
+            2.361522388333908e-01
